@@ -1,2 +1,4 @@
-<h1>Labs#index</h1>
-<p>Find me in app/views/labs/index.html.erb</p>
+<h1>Список лаб:</h1>
+<% @labs.each do |lab| %>
+	<p><%= lab.task %></p>
+<% end %>
