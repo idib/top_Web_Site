@@ -1,4 +1,4 @@
 <h1>Список лаб:</h1>
 <% @labs.each do |lab| %>
-	<p><%= lab.task %></p>
+	<p><%= link_to lab.task, lab_path(lab)  %></p>
 <% end %>

@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  get 'labs' => 'labs#index'
+  get 'like/:id' => 'sites#like'
+
+  # get 'labs' => 'labs#index'
+  # get 'labs/:id' => 'labs#show'
+  resources :labs
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
