@@ -1,6 +1,7 @@
 <h1>Сайты этой лабы:</h1>
 <% @sites.each_with_index do |site,idx| %>
 	<h2><%= idx %></h2>
+	<h3>Сделал: <%= site.user.name %></h3>
 	<h3>Лайков: <%= site.likes %></h3>
 	<% site.screens.each do |screen_url| %>
 		<img src="<%= screen_url %>" style="max-height: 200px; float:left">
