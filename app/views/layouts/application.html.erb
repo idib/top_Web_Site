@@ -7,6 +7,9 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+<% if not user_signed_in? %>
+	<p><a href="/user/sign_in">Вход</a></p>
+<% end %>
 <% if notice %>
   <p class="alert alert-success"><%= notice %></p>
 <% end %>
