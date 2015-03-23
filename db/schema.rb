@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150323115452) do
+ActiveRecord::Schema.define(version: 20150323115954) do
 
   create_table "labs", force: :cascade do |t|
     t.text     "task"
@@ -25,9 +25,11 @@ ActiveRecord::Schema.define(version: 20150323115452) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
     t.integer  "lab_id"
+    t.integer  "user_id"
   end
 
   add_index "sites", ["lab_id"], name: "index_sites_on_lab_id"
+  add_index "sites", ["user_id"], name: "index_sites_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
