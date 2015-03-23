@@ -5,4 +5,8 @@ class User < ActiveRecord::Base
          :rememberable, :trackable, :validatable
 
   has_many :sites
+
+  def email_required?
+  	false
+  end
 end
