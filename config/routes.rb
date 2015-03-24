@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, :skip => [:sessions]
+
+  as :user do
+    post "/users/sign_in" => "devise/sessions#create", :as => :user_session
+    delete "/users/sign_out" => "devise/sessions#destroy", :as => :destroy_user_session
+  end
   get 'like/:id' => 'sites#like'
 
   # get 'labs' => 'labs#index'
