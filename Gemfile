@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-
+ruby '2.0.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.1'
@@ -25,9 +25,10 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # for authentication
 gem 'devise', '~> 3.4.0'
-
 # for image hosting
 gem 'cloudinary'
+# for heroku
+gem 'rails_12factor'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
