@@ -3,12 +3,16 @@ class SitesController < ApplicationController
 	def like
 		site = Site.find_by_id(params[:id])
 		if site
-			if current_user.has_like_for? site
-				site.likes += 1
-				site.save
-				current_user.like site
+			if current_user.id == site.user.id
+				flash[:notice] = 'Нельзя голосовать за свою работу'
 			else
-				flash[:notice] = 'Вы уже голосовали за эту работу или Вы проголосовали за максимальное количество работ в этой лабе'
+				if current_user.has_like_for?(site)
+					site.likes += 1
+					site.save
+					current_user.like site
+				else
+					flash[:notice] = 'Вы уже голосовали за эту работу или Вы проголосовали за максимальное количество работ в этой лабе'
+				end
 			end
 		end
 		redirect_back
