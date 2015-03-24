@@ -13,4 +13,8 @@ class SitesController < ApplicationController
 		end
 		redirect_to request.referer || :root
 	end
+
+	def show
+		
+	end
 end

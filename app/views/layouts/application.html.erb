@@ -8,7 +8,8 @@
 </head>
 <body>
 <% if user_signed_in? %>
-	<p><%= link_to "Выход", destroy_user_session_path, :method => :delete %></p>
+	<%= link_to "Профиль", users_profile_path %> |
+	<%= link_to "Выход", destroy_user_session_path, :method => :delete %>
 <% else %>
 	<%= render 'layouts/sign_in_form' %>
 <% end %>

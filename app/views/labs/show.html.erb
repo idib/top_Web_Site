@@ -4,11 +4,12 @@
 	<h3>Сделал: <%= site.user.name %></h3>
 	<h3>Лайков: <%= site.likes %></h3>
 	<% site.screens.each do |screen_url| %>
-		<img src="<%= screen_url %>" style="max-height: 200px; float:left">
+		<%= link_to :controller => "sites", :action => "show", :id => site  do %>
+			<img src="<%= screen_url %>" style="max-height: 200px; float:left">
+		<% end %>
 	<% end %>
 	<% if user_signed_in? %>
 		<%= link_to "ЛАЙК!", :controller => "sites", :action => "like", :id => site %>
 	<% end %>
-	
 	<div style="clear: both;"></div>
 <% end %>

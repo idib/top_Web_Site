@@ -1,0 +1,8 @@
+<h1>Мои сайты:</h1>
+<% @sites.each do |site| %>
+	<p><%= link_to site.lab.task, :controller => "sites", :action => "show", :id => site %></p>
+<% end %>
+<h1>Список лаб:</h1>
+<% @labs.each do |lab| %>
+	<p><%= link_to lab.task, lab_path(lab)  %></p>
+<% end %>
