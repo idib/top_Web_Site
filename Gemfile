@@ -26,6 +26,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # for authentication
 gem 'devise', '~> 3.4.0'
 
+# for image hosting
+gem 'cloudinary'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
