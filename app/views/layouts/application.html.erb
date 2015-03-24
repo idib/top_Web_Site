@@ -7,10 +7,10 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-<% if not user_signed_in? %>
-	<%= render 'layouts/sign_in_form' %>
-<% else %>
+<% if user_signed_in? %>
 	<p><%= link_to "Выход", destroy_user_session_path, :method => :delete %></p>
+<% else %>
+	<%= render 'layouts/sign_in_form' %>
 <% end %>
 <% if notice %>
   <p class="alert alert-success"><%= notice %></p>

@@ -6,7 +6,9 @@
 	<% site.screens.each do |screen_url| %>
 		<img src="<%= screen_url %>" style="max-height: 200px; float:left">
 	<% end %>
-	<%= link_to "ЛАЙК!", :controller => "sites", :action => "like", :id => site %>
+	<% if user_signed_in? %>
+		<%= link_to "ЛАЙК!", :controller => "sites", :action => "like", :id => site %>
+	<% end %>
 	
 	<div style="clear: both;"></div>
 <% end %>
