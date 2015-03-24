@@ -7,4 +7,8 @@ class ApplicationController < ActionController::Base
   def after_sign_out_path_for(r)
     request.referrer
   end
+
+  def redirect_back
+    redirect_to request.referer || :root
+  end
 end

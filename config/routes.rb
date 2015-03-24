@@ -6,8 +6,9 @@ Rails.application.routes.draw do
     delete "/users/sign_out" => "devise/sessions#destroy", :as => :destroy_user_session
   end
   get '/sites/:id' => 'sites#show'
+  post '/sites/:lab_id/addscreens' => 'sites#add_screens'
   get '/sites/like/:id' => 'sites#like'
-
+  get '/sites/new/:lab_id' => 'sites#new'
   get '/users/profile' => 'users#profile'
   # get 'labs' => 'labs#index'
   # get 'labs/:id' => 'labs#show'

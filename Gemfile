@@ -25,8 +25,6 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # for authentication
 gem 'devise', '~> 3.4.0'
-# for image hosting
-gem 'cloudinary'
 # for heroku
 gem 'rails_12factor'
 

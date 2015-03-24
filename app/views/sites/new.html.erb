@@ -1,0 +1,26 @@
+<script src="//widget.cloudinary.com/global/all.js" type="text/javascript">  
+</script>
+<p>
+	<button id="upload-button"></button>
+</p>
+<p>
+	<button id="save-button">Соханить</button>
+</p>
+<script>
+	var screen_array = [];
+	$('#upload-button').cloudinary_upload_widget(
+		{ cloud_name: 'doy3kofpg', 
+		upload_preset: 'h0cqph2b', 
+		button_class: "TODO",
+		button_caption: "Загрузить скрины"},
+		function(err, result) { 
+			if(err) return;
+			for(var i = 0; i < result.length; ++ii){
+				screen_array.push(result[i].url);
+			}
+		});
+	$('#save-button').click(function () {
+		$.post("<%= url_for(controller: 'sites', action: 'add_screens', lab_id: @lab_id) %>", {screens: screen_array});
+
+	});
+</script>
