@@ -34,6 +34,7 @@ class SitesController < ApplicationController
 				site = current_user.sites.create(screens: params[:screens], lab_id: lab_id)
 			else
 				sites[0].screens += params[:screens]
+				sites[0].save
 			end
 		end
 		render :nothing => true

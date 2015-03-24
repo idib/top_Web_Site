@@ -1,3 +1,6 @@
+<% if @user_havent_site_for_lab %>
+	<%= link_to "Добавить сюда свой сайт", :controller => "sites", :action => "new", :lab_id => @lab.id %>
+<% end %>
 <h1>Сайты этой лабы:</h1>
 <% @sites.each_with_index do |site,idx| %>
 	<h2><%= idx %></h2>

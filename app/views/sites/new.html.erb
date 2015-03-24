@@ -15,7 +15,7 @@
 		button_caption: "Загрузить скрины"},
 		function(err, result) { 
 			if(err) return;
-			for(var i = 0; i < result.length; ++ii){
+			for(var i = 0; i < result.length; ++i){
 				screen_array.push(result[i].url);
 			}
 		});
