@@ -2,3 +2,6 @@
 <% @labs.each do |lab| %>
 	<p><%= link_to lab.task, lab_path(lab)  %></p>
 <% end %>
+<p>Недавний сайт:</p>
+<%= @random_name %>
+<%= cl_image_tag(@random_screen, crop: :fill, width: 500, height: 300) %>

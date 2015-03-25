@@ -1,6 +1,9 @@
 class LabsController < ApplicationController
 	def index
 		@labs = Lab.all
+		@random_site =  Site.order('created_at DESC').limit(10).sample
+		@random_name = @random_site.name
+		@random_screen = @random_site.screens.sample
 	end
 
 	def show
