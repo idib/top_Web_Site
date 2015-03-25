@@ -1,12 +1,15 @@
 <%= cloudinary_js_config %>
-<%= form_for [:lab, @site] do |f| %>
+<%= form_for [@site.lab, @site] do |f| %>
 	<p>Название сайта</p>
 	<%= f.text_field(:name) %>
 	<p>Загрузите свои скрины:</p>
 	<%= cl_image_upload_tag("screens[]", :html => { :multiple => true }) %>
 	<div class="preview">
 		<% @site.screens.each do |screen_url| %>
-			<%= cl_image_tag(screen_url, crop: :fill, width: 150, height: 150, style: "float:left" ) %>
+			<div style="float:left">
+				<%= cl_image_tag(screen_url, crop: :fill, width: 150, height: 150 ) %>
+				<div class="delete-screen" data-id="<%= screen_url -%>">X</div>
+			</div>
 		<% end %>
 	</div>
 	<div class="progress_bar" style="background-color: red;height: 20px;width:0;"></div>
@@ -25,4 +28,14 @@
 	$('.cloudinary-fileupload').bind('fileuploadprogress', function(e, data) { 
 		$('.progress_bar').css('width', Math.round((data.loaded * 100.0) / data.total) + '%'); 
 	});
+	$('.delete-screen').click(function () {
+		var el = $(this);
+		var screen_url = el.attr('data-id');
+		$.ajax({ method: "DELETE",
+			url: "<%= url_for controller: :sites, 
+			action: :delete_screen, 
+			id: @site.id -%>",
+			data: { screen_url: screen_url}});
+		el.parent().remove();
+	})
 </script>

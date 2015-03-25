@@ -1,5 +1,5 @@
 <% if @user_havent_site_for_lab %>
-	<%= link_to "Добавить сюда свой сайт", :controller => "sites", :action => "new", :lab_id => @lab.id %>
+	<%= link_to "Добавить сюда свой сайт", new_lab_site_path(@lab) %>
 <% end %>
 <h1>Сайты этой лабы:</h1>
 <% @sites.each_with_index do |site,idx| %>
@@ -7,8 +7,8 @@
 	<h3>Сделал: <%= site.user.name %></h3>
 	<h3>Лайков: <%= site.likes %></h3>
 	<% site.screens.each do |screen_url| %>
-		<%= link_to :controller => "sites", :action => "show", :id => site  do %>
-			<img src="<%= screen_url %>" style="max-height: 200px; float:left">
+		<%= link_to [@lab, site]  do %>
+			<%= cl_image_tag(screen_url, crop: :fill, width: 300, height: 300, style: "float:left" ) %>
 		<% end %>
 	<% end %>
 	<% if user_signed_in? %>

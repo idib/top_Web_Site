@@ -1,4 +1,5 @@
 class SitesController < ApplicationController
+	before_action :check_owner, only: [:update, :edit, :delete_screen]
 	before_action :authenticate_user!, except: [:show]
 	def like
 		site = Site.find_by_id(params[:id])
@@ -19,36 +20,94 @@ class SitesController < ApplicationController
 	end
 
 	def new
-		@lab_id = params[:lab_id]
-		if Lab.exists?(@lab_id)
-			if current_user.sites.where(lab_id: @lab_id).exists?
+		lab_id = params[:lab_id]
+		if Lab.exists?(lab_id)
+			if current_user.sites.where(lab_id: lab_id).exists?
 				flash[:notice] = 'У Вас уже есть сайт для этой лабы'
 				redirect_back
+			else
+				@site = Site.new
 			end
 		else
 			redirect_back
 		end
 	end
 
-	def add_screens
-		lab_id = params[:lab_id]
-		if Lab.exists?(lab_id)
-			sites = current_user.sites.where(lab_id: lab_id)
-			if sites.count == 0
-				site = current_user.sites.create(screens: params[:screens], lab_id: lab_id)
+	def create
+		unless current_user.sites.where(lab_id: params[:lab_id]).exists?
+			if validate
+				site = current_user.sites.create(name: params[:site][:name], screens: params[:screens], lab_id: params[:lab_id])
+				redirect_to [site.lab, site]
 			else
-				sites[0].screens += params[:screens]
-				sites[0].save
+				@site = Site.new
+				@site.name = params[:site][:name]
+				@site.screens = params[:screens]
+				render 'new'
 			end
 		end
-		render :nothing => true
 	end
 
-	def create
+	def edit
+		@site = Site.find params[:id]
+	end
 
+	def delete_screen
+		site = Site.find(params[:id])
+		site.screens.delete(params[:screen_url])
+		site.save
+		render nothing: true
+	end
+
+	def update
+		@site = Site.find params[:id]
+		if validate
+			@site.name = params[:site][:name]
+			@site.screens += params[:screens]
+			@site.save
+			flash[:notice] = "Изменения успешно сохранены"
+			redirect_back
+		else
+			render 'edit'
+		end
+	end
+
+	def index
+		if Lab.exists? params[:lab_id]
+			lab = Lab.find params[:lab_id]
+			redirect_to lab_path(lab)
+		else
+			redirect_back
+		end
 	end
 
 	def show
-		
+		@site = Site.find params[:id]
+	end
+
+	private
+	def validate
+		params[:screens] ||= []
+		params[:screens].map! { |scr|
+			preloaded = Cloudinary::PreloadedFile.new(scr)
+			if preloaded.valid?
+				preloaded.identifier
+			else
+				""
+			end
+		}
+		params[:screens].delete ""
+		if params[:site][:name].size > 150
+			flash[:notice] = notice
+			false
+		else
+			true
+		end
+	end
+
+	def check_owner
+		site = Site.find_by_id params[:id]
+		if current_user.id != site.user.id
+			redirect_to :root
+		end
 	end
 end

@@ -1,1 +1,4 @@
+<% if current_user.id == @site.user.id %>
+	<%= link_to "Редактировать", edit_lab_site_path(:lab,@site) %>
+<% end %>
 ЗДЕСЬ ТИПА САЙТ ХОСТИТСЯ

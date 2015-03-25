@@ -5,14 +5,13 @@ Rails.application.routes.draw do
     post "/users/sign_in" => "devise/sessions#create", :as => :user_session
     delete "/users/sign_out" => "devise/sessions#destroy", :as => :destroy_user_session
   end
-  get '/sites/:id' => 'sites#show'
-  post '/sites/:lab_id/addscreens' => 'sites#add_screens'
   get '/sites/like/:id' => 'sites#like'
-  get '/sites/new/:lab_id' => 'sites#new'
   get '/users/profile' => 'users#profile'
-  # get 'labs' => 'labs#index'
-  # get 'labs/:id' => 'labs#show'
-  resources :labs
+  delete '/sites/:id/delete_screen' => 'sites#delete_screen'
+
+  resources :labs do
+    resources :sites
+  end
   root 'labs#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
