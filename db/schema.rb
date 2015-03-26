@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150325102945) do
+ActiveRecord::Schema.define(version: 20150326091340) do
 
   create_table "labs", force: :cascade do |t|
     t.text     "task"
@@ -49,9 +49,10 @@ ActiveRecord::Schema.define(version: 20150325102945) do
     t.string   "username"
     t.string   "name"
     t.text     "likes_per_site"
+    t.boolean  "is_admin"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
+  add_index "users", ["email"], name: "index_users_on_email"
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   add_index "users", ["username"], name: "index_users_on_username", unique: true
 

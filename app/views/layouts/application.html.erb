@@ -9,6 +9,9 @@
 <body>
 <% if user_signed_in? %>
 	<%= link_to "Профиль", users_profile_path %> |
+	<% if current_user.is_admin? %>
+		<%= link_to "Добавить лабу", new_lab_path %> |
+	<% end %>
 	<%= link_to "Выход", destroy_user_session_path, :method => :delete %>
 <% else %>
 	<%= render 'layouts/sign_in_form' %>
