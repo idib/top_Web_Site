@@ -29,6 +29,8 @@ gem 'devise', '~> 3.4.0'
 gem 'cloudinary'
 # for heroku
 gem 'rails_12factor'
+# for pagination
+gem 'will_paginate', '~> 3.0.6'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

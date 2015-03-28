@@ -5,6 +5,7 @@
 	<%= link_to "Редактировать лабу", edit_lab_path(@lab) %>
 <% end %>
 <h1>Сайты этой лабы:</h1>
+<%= will_paginate @sites %>
 <% @sites.each_with_index do |site,idx| %>
 	<h2><%= idx %></h2>
 	<h3>Сделал: <%= site.user.name %></h3>
