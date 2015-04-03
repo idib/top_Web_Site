@@ -1,22 +1,45 @@
-<% if @user_havent_site_for_lab %>
-	<%= link_to "Добавить сюда свой сайт", new_lab_site_path(@lab) %>
-<% end %>
-<% if user_signed_in? and current_user.is_admin? %>
-	<%= link_to "Редактировать лабу", edit_lab_path(@lab) %>
-<% end %>
-<h1>Сайты этой лабы:</h1>
-<%= will_paginate @sites %>
-<% @sites.each_with_index do |site,idx| %>
-	<h2><%= idx %></h2>
-	<h3>Сделал: <%= site.user.name %></h3>
-	<h3>Лайков: <%= site.likes %></h3>
-	<% site.screens.each do |screen_url| %>
-		<%= link_to [@lab, site]  do %>
-			<%= cl_image_tag(screen_url, crop: :fill, width: 300, height: 300, style: "float:left" ) %>
+<% if user_signed_in? %>
+	<% content_for :menu_items do %>
+		<li class="selected">
+			<span>
+				<% if @user_havent_site_for_lab %>
+					<%= link_to "Добавить сюда свой сайт", new_lab_site_path(@lab) %>
+				<% else %>
+					<%= link_to "Редактировать мой сайт", edit_lab_site_path(:lab,@user_site) %>
+				<% end %>
+			</span>
+		</li>
+		<% if current_user.is_admin? %>
+			<li class="selected">
+				<span><%= link_to "Редактировать лабу", edit_lab_path(@lab) %></span>
+			</li>
 		<% end %>
 	<% end %>
-	<% if user_signed_in? %>
-		<%= link_to "ЛАЙК!", :controller => "sites", :action => "like", :id => site %>
-	<% end %>
-	<div style="clear: both;"></div>
+<% end %>
+<% content_for :title, "Лабораторная работа" %>
+<% content_for :label do %>
+	<p><%= @lab.task %></p>
+	<div class="apple_pagination" style="text-align: center;">
+		<%= will_paginate @sites %>
+	</div>
+<% end %>
+
+<% @sites.each_with_index do |site,idx| %>
+	<div class="rabota">
+		<div class="img">
+			<% site.screens.each do |screen_url| %>
+				<%# link_to [@lab, site]  do %>
+				<%= cl_image_tag(screen_url, crop: :fill, width: 300 ) %>
+				<%# end %>
+			<% end %>
+		</div>
+		<div class="text">
+			<span><%= site.name %></span>
+			<h3>Сделал: <%= site.user.name %> (<%= site.user.group %>)</h3>
+			<h3><span class="like-counter"><%= site.likes %></span>♥</h3>
+			<div class="">
+				<%= render 'like', site: site %>
+			</div>
+		</div>
+	</div>
 <% end %>

@@ -1,21 +1,25 @@
+<% content_for :title, "Редактирование сайта" %>
 <%= cloudinary_js_config %>
-<%= form_for [@site.lab, @site] do |f| %>
-	<p>Название сайта</p>
-	<%= f.text_field(:name) %>
-	<p>Загрузите свои скрины:</p>
-	<%= cl_image_upload_tag("screens[]", :html => { :multiple => true }) %>
-	<div class="preview">
-		<% @site.screens.each do |screen_url| %>
-			<div style="float:left">
-				<%= cl_image_tag(screen_url, crop: :fill, width: 150, height: 150 ) %>
-				<div class="delete-screen" data-id="<%= screen_url -%>">X</div>
-			</div>
-		<% end %>
-	</div>
-	<div class="progress_bar" style="background-color: red;height: 20px;width:0;"></div>
-	<%= submit_tag "Отправить" %>
-<% end %>
-
+<div class="lab">
+	<span>
+	<%= form_for [@site.lab, @site] do |f| %>
+		<p>Название сайта</p>
+		<%= f.text_field(:name) %>
+		<p>Загрузите свои скрины:</p>
+		<%= cl_image_upload_tag("screens[]", :html => { :multiple => true }) %>
+		<div class="preview">
+			<% @site.screens.each do |screen_url| %>
+				<div style="float:left">
+					<%= cl_image_tag(screen_url, crop: :fill, width: 150, height: 150 ) %>
+					<div class="delete-screen" data-id="<%= screen_url -%>">X</div>
+				</div>
+			<% end %>
+		</div>
+		<div class="progress_bar" style="background-color: red;height: 20px;width:0;"></div>
+		<%= submit_tag "Отправить" %>
+	<% end %>
+	</span>
+</div>
 <script>
 	$('.cloudinary-fileupload').bind('cloudinarydone', function(e, data) {  
 		$('.preview').append(

@@ -7,17 +7,12 @@ class User < ActiveRecord::Base
   has_many :sites
   serialize :likes, Hash
   serialize :likes_per_site, Hash
-  before_create :init_likes, :init_likes_per_site
-  MAX_LIKES_PER_LAB = 3
-
-  def has_like_for? site
-    lab_likes_count(site.lab) > 0 and not liked? site
-  end
+  before_create :init_likes
 
   def like site
-    self.likes[site.lab.id] = lab_likes_count(site.lab) - 1
-    self.likes_per_site[site.id] = true
+    self.likes[site.id] = 1 - (self.likes[site.id] || 0)
     self.save
+    self.likes[site.id] == 1
   end
 
   def email_required?
@@ -26,20 +21,7 @@ class User < ActiveRecord::Base
 
   private 
   def init_likes
-    self.likes ||= Hash.new(MAX_LIKES_PER_LAB)
+    self.likes ||= Hash.new(0)
   end
-
-  def init_likes_per_site
-    self.likes_per_site ||= {}
-  end
-
-  def lab_likes_count lab
-    self.likes[lab.id] || MAX_LIKES_PER_LAB
-  end
-
-  def liked? site
-    self.likes_per_site[site.id]
-  end
-
 
 end

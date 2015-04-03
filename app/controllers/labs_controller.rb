@@ -1,18 +1,29 @@
 class LabsController < ApplicationController
-	before_action :authenticate_user!, except: [:index, :show]
-	before_action :check_admin, except: [:index, :show]
+	before_action :authenticate_user!, except: [:index, :show, :main]
+	before_action :check_admin, except: [:index, :show, :main]
+	def main
+		@random =  Site.order('created_at DESC').limit(10).shuffle[0..2].map { |site|
+			OpenStruct.new({:name => site.name, :screen => site.screens.sample, :site => site})
+		}
+	end
+
 	def index
 		@labs = Lab.all
-		@random_site =  Site.order('created_at DESC').limit(10).sample
-		@random_name = @random_site.name
-		@random_screen = @random_site.screens.sample
+		@table_view = params[:view] == "table"
+		if @table_view
+			@sites = Site.all
+			@groups = User.all.map { |u| u.group }.uniq
+		end
 	end
 
 	def show
 		@lab = Lab.find_by_id(params[:id])
 		if @lab
 			@sites = @lab.sites.page(params[:page])
-			@user_havent_site_for_lab = (user_signed_in? and not current_user.sites.where(lab_id: @lab.id).exists?)
+			if user_signed_in?
+				@user_site = current_user.sites.where(lab_id: @lab.id)[0]
+				@user_havent_site_for_lab = @user_site.nil?
+			end
 		else
 			redirect_back
 		end

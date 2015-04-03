@@ -1,8 +1,17 @@
-<h1>Мои сайты:</h1>
-<% @sites.each do |site| %>
-	<p><%= link_to site.lab.task, [site.lab, site] %></p>
-<% end %>
-<h1>Список лаб:</h1>
-<% @labs.each do |lab| %>
-	<p><%= link_to lab.task, lab_path(lab)  %></p>
+<% content_for :title, "Мой профиль" %>
+<div class="lab">
+	<span>
+		<h1>Мои сайты:</h1>
+		<% @sites.each do |site| %>
+			<p><%= link_to "#{site.name} (#{site.lab.task})", edit_lab_site_path(site.lab, site) %></p>
+		<% end %>
+	</span>
+</div>
+<% if false %>
+	<div class="lab">
+		<h1>Список лаб:</h1>
+		<% @labs.each do |lab| %>
+			<p><%= link_to lab.task, lab_path(lab)  %></p>
+		<% end %>
+	</div>
 <% end %>

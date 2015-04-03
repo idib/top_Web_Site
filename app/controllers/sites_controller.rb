@@ -4,26 +4,24 @@ class SitesController < ApplicationController
 	def like
 		site = Site.find_by_id(params[:id])
 		if site
-			if current_user.id == site.user.id
-				flash[:notice] = 'Нельзя голосовать за свою работу'
+			like = current_user.like site
+			if like
+				site.likes += 1
 			else
-				if current_user.has_like_for?(site)
-					site.likes += 1
-					site.save
-					current_user.like site
-				else
-					flash[:notice] = 'Вы уже голосовали за эту работу или Вы проголосовали за максимальное количество работ в этой лабе'
-				end
+				site.likes -= 1
 			end
+			site.save
+			render json: {like: like}
+		else
+			render json: {err: true}
 		end
-		redirect_back
 	end
 
 	def new
 		lab_id = params[:lab_id]
 		if Lab.exists?(lab_id)
 			if current_user.sites.where(lab_id: lab_id).exists?
-				flash[:notice] = 'У Вас уже есть сайт для этой лабы'
+				flash[:alert] = 'У Вас уже есть сайт для этой лабы'
 				redirect_back
 			else
 				@site = Site.new
@@ -37,13 +35,16 @@ class SitesController < ApplicationController
 		unless current_user.sites.where(lab_id: params[:lab_id]).exists?
 			if validate
 				site = current_user.sites.create(name: params[:site][:name], screens: params[:screens], lab_id: params[:lab_id])
-				redirect_to [site.lab, site]
+				redirect_to site.lab
 			else
 				@site = Site.new
 				@site.name = params[:site][:name]
 				@site.screens = params[:screens]
 				render 'new'
 			end
+		else
+			flash[:alert] = 'У Вас уже есть сайт для этой лабы'
+			redirect_back
 		end
 	end
 
@@ -54,6 +55,11 @@ class SitesController < ApplicationController
 	def delete_screen
 		site = Site.find(params[:id])
 		site.screens.delete(params[:screen_url])
+		if site.screens.empty?
+			site.screens = [42]
+			site.save
+			site.screens = []
+		end
 		site.save
 		render nothing: true
 	end
@@ -81,7 +87,8 @@ class SitesController < ApplicationController
 	end
 
 	def show
-		@site = Site.find params[:id]
+		#@site = Site.find params[:id]
+		redirect_back
 	end
 
 	private
@@ -96,8 +103,8 @@ class SitesController < ApplicationController
 			end
 		}
 		params[:screens].delete ""
-		if params[:site][:name].size > 150
-			flash[:notice] = notice
+		if params[:site][:name].size > 25
+			flash[:alert] = "Слишком длинное название"
 			false
 		else
 			true

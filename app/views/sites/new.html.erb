@@ -1,17 +1,22 @@
+<% content_for :title, "Создание сайта" %>
 <%= cloudinary_js_config %>
-<%= form_for [:lab, @site] do |f| %>
-	<p>Название сайта</p>
-	<%= f.text_field(:name) %>
-	<p>Загрузите свои скрины:</p>
-	<%= cl_image_upload_tag("screens[]", :html => { :multiple => true }) %>
-	<div class="preview">
-		<% @site.screens.each do |screen_url| %>
-			<%= cl_image_tag(screen_url, crop: :fill, width: 150, height: 150, style: "float:left" ) %>
-		<% end %>
-	</div>
-	<div class="progress_bar" style="background-color: red;height: 20px;width:0;"></div>
-	<%= submit_tag "Отправить" %>
-<% end %>
+<div class="lab">
+	<span>
+	<%= form_for [:lab, @site] do |f| %>
+		<p>Название сайта</p>
+		<%= f.text_field(:name) %>
+		<p>Загрузите свои скрины:</p>
+		<%= cl_image_upload_tag("screens[]", :html => { :multiple => true }) %>
+		<div class="preview">
+			<% @site.screens.each do |screen_url| %>
+				<%= cl_image_tag(screen_url, crop: :fill, width: 150, height: 150, style: "float:left" ) %>
+			<% end %>
+		</div>
+		<div class="progress_bar" style="background-color: red;height: 20px;width:0;"></div>
+		<%= submit_tag "Отправить" %>
+	<% end %>
+	</span>
+</div>
 
 <script>
 	$('.cloudinary-fileupload').bind('cloudinarydone', function(e, data) {  

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150326091340) do
+ActiveRecord::Schema.define(version: 20150402103804) do
 
   create_table "labs", force: :cascade do |t|
     t.text     "task"
@@ -48,8 +48,8 @@ ActiveRecord::Schema.define(version: 20150326091340) do
     t.datetime "updated_at"
     t.string   "username"
     t.string   "name"
-    t.text     "likes_per_site"
     t.boolean  "is_admin"
+    t.string   "group"
   end
 
   add_index "users", ["email"], name: "index_users_on_email"

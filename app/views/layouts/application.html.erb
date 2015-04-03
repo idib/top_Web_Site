@@ -1,28 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Voting</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= csrf_meta_tags %>
+	<title>
+		<% if content_for? :title %>
+			<%= yield(:title) %>
+		<% else %>
+			Voting
+		<% end %>
+	</title>
+	<%= stylesheet_link_tag    'lab', media: 'all', 'data-turbolinks-track' => true %>
+	<%= javascript_include_tag "application" %>
+	<%= javascript_include_tag 'lab', 'data-turbolinks-track' => true %>
+	<%= yield(:ss) if content_for? :ss %>
+	<%= csrf_meta_tags %>
+
 </head>
 <body>
-<% if user_signed_in? %>
-	<%= link_to "Профиль", users_profile_path %> |
-	<% if current_user.is_admin? %>
-		<%= link_to "Добавить лабу", new_lab_path %> |
+	<div class="header">
+		<% if content_for?(:manager) or content_for?(:label) or content_for?(:title) %>
+			<div class="manager">
+				<%= yield(:manager) if content_for? :manager %>
+				<div class="url">
+					<% if content_for? :label %>
+						<%= yield(:label) %>
+					<% elsif content_for? :title %>
+						<%= yield(:title) %>
+					<% end %>
+				</div>
+			</div>
+		<% end %>
+		
+		<div class="menu">
+			<ul id = "menu">
+				<li class="selected">
+					<span ><%= link_to "Главная страница", root_path %></span>
+				</li>
+				<li class="selected">
+					<span ><%= link_to "Все лабы", labs_path %></span>
+				</li>
+				<li class="selected">
+					<span ><%= link_to "Таблица достижений", labs_path(view: "table", sorts: {:votes => -1}) %></span>
+				</li>
+				<%= yield(:menu_items) if content_for? :menu_items %>
+				<% if user_signed_in? %>
+					<li class="selected">
+						<span ><%= link_to "Профиль", users_profile_path %></span>
+					</li>
+					<% if current_user.is_admin? %>
+						<li class="selected">
+							<span ><%= link_to "Добавить лабу", new_lab_path %></span>
+						</li>
+					<% end %>
+					<li class="selected">
+						<span ><%= link_to "Выход", destroy_user_session_path %></span>
+					</li>
+				<% end %>
+			</ul> 
+		</div>
+		<% unless user_signed_in? %>
+			<%= render 'layouts/sign_in_form' %>
+		<% end %>
+	</div>
+
+	<% if notice %>
+		<p class="alert alert-success"><%= notice %></p>
 	<% end %>
-	<%= link_to "Выход", destroy_user_session_path, :method => :delete %>
-<% else %>
-	<%= render 'layouts/sign_in_form' %>
-<% end %>
-<% if notice %>
-  <p class="alert alert-success"><%= notice %></p>
-<% end %>
-<% if alert %>
-  <p class="alert alert-danger"><%= alert %></p>
-<% end %>
-<%= yield %>
+	<% if alert %>
+		<p class="alert alert-danger"><%= alert %></p>
+	<% end %>
+	<div class="content">
+		<%= yield %>
+	</div>
 
 </body>
 </html>

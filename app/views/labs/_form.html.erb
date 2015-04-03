@@ -1,5 +1,9 @@
-<%= form_for @lab do |f| %>
-	<p>Задание:</p>
-	<%= f.text_field(:task) %>
-	<%= f.submit "Отправить" %>
-<% end %>
+<div class="lab">
+	<span>
+	<%= form_for @lab do |f| %>
+		<p>Задание:</p>
+		<%= f.text_field(:task) %>
+		<%= f.submit "Отправить" %>
+	<% end %>
+	</span>
+</div>
