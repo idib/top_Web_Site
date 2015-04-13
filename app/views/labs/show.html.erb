@@ -23,14 +23,18 @@
 		<%= will_paginate @sites %>
 	</div>
 <% end %>
+<% content_for (:ss) do %>
+	<%= stylesheet_link_tag 'lightbox' %>
+	<%= javascript_include_tag 'lightbox.min' %>
+<% end %>
 
 <% @sites.each_with_index do |site,idx| %>
 	<div class="rabota">
 		<div class="img">
 			<% site.screens.each do |screen_url| %>
-				<%# link_to [@lab, site]  do %>
-				<%= cl_image_tag(screen_url, crop: :fill, width: 300 ) %>
-				<%# end %>
+				<a href="<%= cl_image_path(screen_url) %>" data-lightbox="<%= site.id %>">
+					<%= cl_image_tag(screen_url, crop: :fill, width: 300 ) %>
+				</a>
 			<% end %>
 		</div>
 		<div class="text">
