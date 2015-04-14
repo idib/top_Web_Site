@@ -1,0 +1,14 @@
+<% @labs.each do |lab| %>
+	<div class="lab">
+		<span><%= link_to lab.task , lab_path(lab) %></span>
+		<div class="">
+			<% lab.sites.each do |site| %>
+				<div class="rab">
+					<span><%= site.name %></span>
+					<%= cl_image_tag(site.screens.sample, crop: :fill, width: 300) %>
+				</div>
+			<% end %>
+			<div class="end"></div>
+		</div>
+	</div>
+<% end %>
