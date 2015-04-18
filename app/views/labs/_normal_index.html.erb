@@ -1,11 +1,18 @@
+<% content_for (:ss) do %>
+	<%= stylesheet_link_tag 'lightbox' %>
+	<%= javascript_include_tag 'lightbox.min' %>
+<% end %>
 <% @labs.each do |lab| %>
 	<div class="lab">
 		<span><%= link_to lab.task , lab_path(lab) %></span>
 		<div class="">
 			<% lab.sites.each do |site| %>
+			<% screen_url = site.screens.sample %>
 				<div class="rab">
-					<span><%= site.name %></span>
-					<%= cl_image_tag(site.screens.sample, crop: :fill, width: 300) %>
+					<span><%= site.user.name %></span>
+					<a href="<%= cl_image_path(screen_url) %>" data-lightbox="<%= site.id %>">
+						<%= cl_image_tag(screen_url, crop: :fill, width: 300 ) %>
+					</a>
 				</div>
 			<% end %>
 			<div class="end"></div>
