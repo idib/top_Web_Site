@@ -8,7 +8,7 @@ class LabsController < ApplicationController
 	end
 
 	def index
-		@labs = Lab.all
+		@labs = Lab.all.order('created_at')
 		@table_view = params[:view] == "table"
 		if @table_view
 			@sites = Site.all
