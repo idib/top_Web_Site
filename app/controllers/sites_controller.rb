@@ -106,7 +106,7 @@ class SitesController < ApplicationController
 			end
 		}
 		params[:screens].delete ""
-		if params[:site][:name].size > 25
+		if params[:site][:name].size > 75
 			flash[:alert] = "Слишком длинное название"
 			false
 		else
