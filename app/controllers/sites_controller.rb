@@ -97,7 +97,10 @@ class SitesController < ApplicationController
 		params[:screens].map! { |scr|
 			preloaded = Cloudinary::PreloadedFile.new(scr)
 			if preloaded.valid?
-				preloaded.identifier
+				#change extension to jpg
+				t = preloaded.identifier.split "."
+				t[-1]="jpg"
+				t.join "."
 			else
 				""
 			end

@@ -15,7 +15,7 @@
 	<% @random.each do |r| %>
 	<div class="slid">
 
-		<%= cl_image_tag(r.screen) %>
+		<%= cl_image_tag(r.screen, quality: 45) %>
 		<div>
 			<div class="text">
 				<%= r.name %>(<span class="like-counter"><%= r.site.likes %></span>♥) 

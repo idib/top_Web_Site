@@ -33,7 +33,7 @@
 	<div class="rabota">
 		<div class="img">
 			<% site.screens.each do |screen_url| %>
-				<a href="<%= cl_image_path(screen_url) %>" data-lightbox="<%= site.id %>">
+				<a href="<%= cl_image_path(screen_url, quality: 70) %>" data-lightbox="<%= site.id %>">
 					<%= cl_image_tag(screen_url, crop: :fill, width: 300 ) %>
 				</a>
 			<% end %>
