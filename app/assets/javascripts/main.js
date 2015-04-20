@@ -19,18 +19,6 @@ function Go(){
 	z[0].className = "slid active";
 }
 
-function formIn(){
-	if(q == 0)
-	{
-		document.getElementById("logPanel").className = "panel active";
-		q++;
-	}else{
-		document.getElementById("logPanel").className = "panel";
-		q--;
-	}
-	
-}
-
 function prev(){
 	if(y == 0)
 	{

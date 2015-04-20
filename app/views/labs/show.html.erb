@@ -31,20 +31,22 @@
 
 <% @sites.each_with_index do |site,idx| %>
 	<div class="rabota">
+		<div class="text">
+			<div>
+				<%= render 'like', site: site %>
+			</div>
+			<span><%= site.name %></span>
+			<h3 class="label">Сделал: <%= site.user.name %> (<%= site.user.group %>)</h3>
+			<h3 class="label"><span class="like-counter"><%= site.likes %></span>♥</h3>
+			
+		</div>
 		<div class="img">
 			<% site.screens.each do |screen_url| %>
 				<a href="<%= cl_image_path(screen_url, quality: 70) %>" data-lightbox="<%= site.id %>">
-					<%= cl_image_tag(screen_url, crop: :fill, width: 300 ) %>
+					<%= cl_image_tag(screen_url, crop: :fill, width: 250, height: 200 ) %>
 				</a>
 			<% end %>
 		</div>
-		<div class="text">
-			<span><%= site.name %></span>
-			<h3>Сделал: <%= site.user.name %> (<%= site.user.group %>)</h3>
-			<h3><span class="like-counter"><%= site.likes %></span>♥</h3>
-			<div class="">
-				<%= render 'like', site: site %>
-			</div>
-		</div>
+		<div style="clear: both"></div>
 	</div>
 <% end %>

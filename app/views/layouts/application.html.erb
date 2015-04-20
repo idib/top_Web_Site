@@ -8,9 +8,9 @@
 			Voting
 		<% end %>
 	</title>
-	<%= stylesheet_link_tag    'lab', media: 'all', 'data-turbolinks-track' => true %>
+	<%= stylesheet_link_tag    'common', media: 'all', 'data-turbolinks-track' => true %>
 	<%= javascript_include_tag "application" %>
-	<%= javascript_include_tag 'lab', 'data-turbolinks-track' => true %>
+	<%= javascript_include_tag 'common', 'data-turbolinks-track' => true %>
 	<%= yield(:ss) if content_for? :ss %>
 	<%= csrf_meta_tags %>
 
@@ -69,6 +69,7 @@
 		<p class="alert alert-danger"><%= alert %></p>
 	<% end %>
 	<div class="content">
+		<div class="header-space"></div>
 		<%= yield %>
 	</div>
 

@@ -1,7 +1,7 @@
 <% content_for :title, "Мой профиль" %>
 <div class="lab">
 	<span>
-		<h1>Мои сайты:</h1>
+		<h3>Мои сайты:</h3>
 		<% @sites.each do |site| %>
 			<p><%= link_to "#{site.name} (#{site.lab.task})", edit_lab_site_path(site.lab, site) %></p>
 		<% end %>
