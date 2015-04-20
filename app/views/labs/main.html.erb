@@ -3,9 +3,11 @@
 	<%= javascript_include_tag 'index' %>
 	<%= javascript_include_tag 'like' %>
 <% end %>
-<% content_for (:manager) do %>
-	<button id ="prev" onclick="prev()">◄</button>
-	<button id="next" onclick="next()">►</button>
+<% if @random.size > 1 %>
+	<% content_for (:manager) do %>
+		<button id ="prev" onclick="prev()">◄</button>
+		<button id="next" onclick="next()">►</button>
+	<% end %>
 <% end %>
 <% content_for :title, "Главная страница" %>
 <% content_for :label, "Недавний сайт" %>
