@@ -1,23 +1,13 @@
-window.onload = function(){
-	Go()
-}
 
 var z;
 var y;
 var q = 0;
-
-function Go(){
-	var name = document.getElementById('menu').getElementsByClassName('selected');
-	var a = 0;
-	for(i = 0; i < name.length; i++)
-	{
-		name[i].style.top = i*100 + 30 + "px";
-		name[i].style.zIndex = 133*i;
-	}
+$(function (){
 	z = document.getElementsByClassName('slid');
 	y = 0;
 	z[0].className = "slid active";
-}
+});
+
 
 function prev(){
 	if(y == 0)

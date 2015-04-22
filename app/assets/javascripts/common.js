@@ -1,28 +1,21 @@
-window.onload = function(){
-	Go()
-}
-
-var q = 0;
-
-function Go(){
-	var name = document.getElementById('menu').getElementsByClassName('selected');
+$(function () {
+	var menu_items = document.getElementById('menu').getElementsByClassName('selected');
 	var a = 0;
-	for(i = 0; i < name.length; i++)
+	for(i = 0; i < menu_items.length; i++)
 	{
-		name[i].style.top = i*100 + 30 + "px";
-		name[i].style.zIndex = 133*i;
+		menu_items[i].style.top = i*80 + 30 + "px";
+		menu_items[i].style.zIndex = 133*i;
 	}
-
-}
+});
+var panel_visible = false;
 
 function formIn(){
-	if(q == 0)
+	if(panel_visible)
 	{
-		document.getElementById("logPanel").className = "panel active";
-		q++;
-	}else{
 		document.getElementById("logPanel").className = "panel";
-		q--;
+		panel_visible=false;
+	}else{
+		document.getElementById("logPanel").className = "panel active";
+		panel_visible=true;
 	}
-	
 }
