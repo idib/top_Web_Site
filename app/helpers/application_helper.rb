@@ -10,4 +10,8 @@ module ApplicationHelper
 	def devise_mapping
 		@devise_mapping ||= Devise.mappings[:user]
 	end
+
+	def url_with_protocol(url)
+		/^http/i.match(url) ? url : "http://#{url}"
+	end
 end

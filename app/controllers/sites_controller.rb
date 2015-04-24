@@ -34,7 +34,7 @@ class SitesController < ApplicationController
 	def create
 		unless current_user.sites.where(lab_id: params[:lab_id]).exists?
 			if validate
-				site = current_user.sites.create(name: params[:site][:name], screens: params[:screens], lab_id: params[:lab_id])
+				site = current_user.sites.create(post_params)
 				redirect_to site.lab
 			else
 				@site = Site.new
@@ -68,6 +68,7 @@ class SitesController < ApplicationController
 		@site = Site.find params[:id]
 		if validate
 			@site.name = params[:site][:name]
+			@site.link = params[:site][:link]
 			@site.screens += params[:screens]
 			@site.save
 			flash[:notice] = "Изменения успешно сохранены"
@@ -120,4 +121,12 @@ class SitesController < ApplicationController
 			redirect_to :root
 		end
 	end
+
+    def post_params
+        {name: params[:site][:name], 
+        screens: params[:screens], 
+        lab_id: params[:lab_id],
+    	link: params[:site][:link]}
+    end
+
 end

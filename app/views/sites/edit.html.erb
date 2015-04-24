@@ -5,6 +5,8 @@
 	<%= form_for [@site.lab, @site] do |f| %>
 		<p>Название сайта</p>
 		<%= f.text_field(:name) %>
+		<p>Ссылка на сайт</p>
+		<%= f.text_field(:link) %>
 		<p>Загрузите свои скрины:</p>
 		<%= cl_image_upload_tag("screens[]", :html => { :multiple => true }) %>
 		<div class="preview">

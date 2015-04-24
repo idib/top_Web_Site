@@ -35,7 +35,10 @@
 			<div>
 				<%= render 'like', site: site %>
 			</div>
-			<span><%= site.name %></span>
+			<span>
+				<%= site.name %>
+				<%= link_to_unless(site.link.blank?, "Посмотреть сайт", url_with_protocol(site.link)) do end%>
+			</span>
 			<h3 class="label">Сделал: <%= site.user.name %> (<%= site.user.group %>)</h3>
 			<h3 class="label"><span class="like-counter"><%= site.likes %></span>♥</h3>
 			
