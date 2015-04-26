@@ -1,3 +1,4 @@
+require 'zip'
 class SitesController < ApplicationController
 	before_action :check_owner, only: [:update, :edit, :delete_screen]
 	before_action :authenticate_user!, except: [:show]
@@ -35,11 +36,13 @@ class SitesController < ApplicationController
 		unless current_user.sites.where(lab_id: params[:lab_id]).exists?
 			if validate
 				site = current_user.sites.create(post_params)
+				unless params[:site][:upload_site].nil?
+					site.upload_static params[:site][:upload_site].path
+					site.save
+				end
 				redirect_to site.lab
 			else
-				@site = Site.new
-				@site.name = params[:site][:name]
-				@site.screens = params[:screens]
+				@site = Site.new(post_params)
 				render 'new'
 			end
 		else
@@ -70,6 +73,9 @@ class SitesController < ApplicationController
 			@site.name = params[:site][:name]
 			@site.link = params[:site][:link]
 			@site.screens += params[:screens]
+			unless params[:site][:upload_site].nil?
+				@site.upload_static params[:site][:upload_site].path
+			end
 			@site.save
 			flash[:notice] = "Изменения успешно сохранены"
 			redirect_back
@@ -95,6 +101,29 @@ class SitesController < ApplicationController
 	private
 	def validate
 		params[:screens] ||= []
+		if params[:site][:name].size > 75
+			flash[:alert] = "Слишком длинное название"
+			return false
+		end
+		site = params[:site][:upload_site]
+		if site!= nil
+			if site.tempfile.size > 2.megabytes
+				flash[:alert] = "Слишком большой файл"
+				return false
+			end
+			begin
+				zip = Zip::File.open(site.path)
+				if zip.glob("index.html") == []
+					flash[:alert] = "Сайт должен иметь index.html"
+					return false
+				end
+			rescue
+				flash[:alert] = "Файл не является zip-архивом"
+				return false
+			ensure
+				zip.close if zip
+			end
+		end
 		params[:screens].map! { |scr|
 			preloaded = Cloudinary::PreloadedFile.new(scr)
 			if preloaded.valid?
@@ -107,12 +136,7 @@ class SitesController < ApplicationController
 			end
 		}
 		params[:screens].delete ""
-		if params[:site][:name].size > 75
-			flash[:alert] = "Слишком длинное название"
-			false
-		else
-			true
-		end
+		return true
 	end
 
 	def check_owner
@@ -122,11 +146,11 @@ class SitesController < ApplicationController
 		end
 	end
 
-    def post_params
-        {name: params[:site][:name], 
-        screens: params[:screens], 
-        lab_id: params[:lab_id],
-    	link: params[:site][:link]}
-    end
+	def post_params
+		{name: params[:site][:name], 
+			screens: params[:screens], 
+			lab_id: params[:lab_id],
+			link: params[:site][:link]}
+	end
 
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150424100128) do
+ActiveRecord::Schema.define(version: 20150426085106) do
 
   create_table "labs", force: :cascade do |t|
     t.text     "task"
@@ -20,14 +20,16 @@ ActiveRecord::Schema.define(version: 20150424100128) do
   end
 
   create_table "sites", force: :cascade do |t|
-    t.integer  "likes",      default: 0
+    t.integer  "likes",       default: 0
     t.text     "screens"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
     t.integer  "lab_id"
     t.integer  "user_id"
     t.string   "name"
     t.string   "link"
+    t.string   "static_id"
+    t.string   "static_link"
   end
 
   add_index "sites", ["lab_id"], name: "index_sites_on_lab_id"

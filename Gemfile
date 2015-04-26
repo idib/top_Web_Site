@@ -31,8 +31,12 @@ gem 'cloudinary'
 gem 'rails_12factor'
 # for pagination
 gem 'will_paginate', '~> 3.0.6'
-#good bye vendor prefixes
+# good bye vendor prefixes
 gem "autoprefixer-rails"
+# upload static sites
+gem 'bitballoon'
+# work with zip
+gem 'rubyzip',  "~> 1.1"
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

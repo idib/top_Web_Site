@@ -2,18 +2,16 @@
 <%= cloudinary_js_config %>
 <div class="lab">
 	<span>
-	<%= form_for [:lab, @site] do |f| %>
+	<%= form_for [:lab, @site], html: {multipart: true} do |f| %>
 		<p>Название сайта</p>
 		<%= f.text_field(:name) %>
 		<p>Ссылка на сайт</p>
 		<%= f.text_field(:link) %>
+		<p>Или загрузите статический сайт в виде ZIP архива</p>
+		<%= f.file_field("upload_site") %>
 		<p>Загрузите свои скрины:</p>
 		<%= cl_image_upload_tag("screens[]", :html => { :multiple => true }) %>
-		<div class="preview">
-			<% @site.screens.each do |screen_url| %>
-				<%= cl_image_tag(screen_url, crop: :fill, width: 150, height: 150, style: "float:left" ) %>
-			<% end %>
-		</div>
+		<div class="preview"></div>
 		<div class="progress_bar" style="background-color: red;height: 20px;width:0;"></div>
 		<%= submit_tag "Отправить" %>
 	<% end %>

@@ -2,11 +2,13 @@
 <%= cloudinary_js_config %>
 <div class="lab">
 	<span>
-	<%= form_for [@site.lab, @site] do |f| %>
+	<%= form_for [@site.lab, @site], html: {multipart: true} do |f| %>
 		<p>Название сайта</p>
 		<%= f.text_field(:name) %>
 		<p>Ссылка на сайт</p>
 		<%= f.text_field(:link) %>
+		<p>Или загрузите статический сайт в виде ZIP архива</p>
+		<%= f.file_field("upload_site") %>
 		<p>Загрузите свои скрины:</p>
 		<%= cl_image_upload_tag("screens[]", :html => { :multiple => true }) %>
 		<div class="preview">
