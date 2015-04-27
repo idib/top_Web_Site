@@ -37,8 +37,8 @@
 			</div>
 			<span>
 				<%= site.name %>
-				(<%= link_to_unless(site.link.blank?, "Посмотреть сайт", url_with_protocol(site.link)) do end -%>
-				<%= link_to_unless(site.static_link.blank?, "Посмотреть сайт", url_with_protocol(site.static_link)) do end -%>)
+				(<%= link_to_unless(site.link.blank?, "Посмотреть сайт", url_with_protocol(site.link), target: :_blank) do end -%>
+				<%= link_to_unless(site.static_link.blank?, "Посмотреть сайт", url_with_protocol(site.static_link), target: :_blank) do end -%>)
 			</span>
 			<h3 class="label">Сделал: <%= site.user.name %> (<%= site.user.group %>)</h3>
 			<h3 class="label"><span class="like-counter"><%= site.likes %></span>♥</h3>
