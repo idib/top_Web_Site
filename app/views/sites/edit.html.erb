@@ -7,8 +7,13 @@
 		<%= f.text_field(:name) %>
 		<p>Ссылка на сайт</p>
 		<%= f.text_field(:link) %>
-		<p>Или загрузите статический сайт в виде ZIP архива</p>
-		<%= f.file_field("upload_site") %>
+		<% if @site.static_id.blank? %>
+			<p>Загрузить статический сайт в виде ZIP архива</p>
+		<% else %>
+			<p id="update-caption">Обновить сайт(zip-архив)</p>
+			<a href="#"><h6 id="site-deleter">Удалить хостящийся сайт</h6></a>
+		<% end %>
+			<%= f.file_field("upload_site") %>
 		<p>Загрузите свои скрины:</p>
 		<%= cl_image_upload_tag("screens[]", :html => { :multiple => true }) %>
 		<div class="preview">
@@ -45,5 +50,14 @@
 			id: @site.id -%>",
 			data: { screen_url: screen_url}});
 		el.parent().remove();
-	})
+	});
+	$('#site-deleter').click(function () {
+		var el = $(this);
+		$.ajax({ method: "DELETE",
+			url: "<%= url_for controller: :sites, 
+			action: :delete_static, 
+			id: @site.id -%>"});
+		el.remove();
+		$("#update-caption").text("Загрузить статический сайт");
+	});
 </script>

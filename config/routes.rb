@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   post '/sites/like/:id' => 'sites#like'
   get '/users/profile' => 'users#profile'
   delete '/sites/:id/delete_screen' => 'sites#delete_screen'
+  delete '/sites/:id/delete_static' => 'sites#delete_static'
 
   resources :labs do
     resources :sites

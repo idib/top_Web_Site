@@ -1,6 +1,6 @@
 require 'zip'
 class SitesController < ApplicationController
-	before_action :check_owner, only: [:update, :edit, :delete_screen]
+	before_action :check_owner, only: [:update, :edit, :delete_screen, :delete_static]
 	before_action :authenticate_user!, except: [:show]
 	def like
 		site = Site.find_by_id(params[:id])
@@ -63,6 +63,13 @@ class SitesController < ApplicationController
 			site.save
 			site.screens = []
 		end
+		site.save
+		render nothing: true
+	end
+
+	def delete_static
+		site = Site.find(params[:id])
+		site.delete_static
 		site.save
 		render nothing: true
 	end

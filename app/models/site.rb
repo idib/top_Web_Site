@@ -18,4 +18,14 @@ class Site < ActiveRecord::Base
 			deploy.wait_for_ready
 		end
 	end
+
+	def delete_static
+		b = BitBalloon::Client.new(:access_token => ENV["BB_ACCESS_TOKEN"])
+		unless self.static_id.nil?
+			s = b.sites.get(self.static_id)
+			s.destroy!
+			self.static_id = nil
+			self.static_link = nil
+		end
+	end
 end
