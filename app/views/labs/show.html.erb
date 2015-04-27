@@ -5,7 +5,7 @@
 				<% if @user_havent_site_for_lab %>
 					<%= link_to "Добавить сюда свой сайт", new_lab_site_path(@lab) %>
 				<% else %>
-					<%= link_to "Редактировать мой сайт", edit_lab_site_path(:lab,@user_site) %>
+					<%= link_to "Редактировать мой сайт", edit_lab_site_path(@lab,@user_site) %>
 				<% end %>
 			</span>
 		</li>

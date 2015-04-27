@@ -1,6 +1,6 @@
 require 'zip'
 class SitesController < ApplicationController
-	before_action :check_owner, only: [:update, :edit, :delete_screen, :delete_static]
+	before_action :check_owner, only: [:update, :edit, :delete_screen, :delete_static, :destroy]
 	before_action :authenticate_user!, except: [:show]
 	def like
 		site = Site.find_by_id(params[:id])
@@ -49,6 +49,14 @@ class SitesController < ApplicationController
 			flash[:alert] = 'У Вас уже есть сайт для этой лабы'
 			redirect_back
 		end
+	end
+
+	def destroy
+		site = Site.find_by_id params[:id]
+		site.delete_static
+		lab = site.lab
+		site.destroy
+		redirect_to lab
 	end
 
 	def edit
