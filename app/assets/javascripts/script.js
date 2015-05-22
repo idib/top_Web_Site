@@ -248,11 +248,12 @@ function clnx(th){
 			case 3:
 				jQuery.ajax({
 					url:     "labs/"+ $(th).attr('data-num'), 
-					type:     "POST",
+					type:     "GET",
 					dataType: "json", 
-					success: function(labs) {
+					success: function(response) {
 						$("#" + z + " > .active.sli>img").fadeOut();
-						if(response.is_ok)
+						var labs = response.labs;
+						if(response.user_have_site)
 						{
 							$("#" + z + " > .active.sli").append('<div class="row"><div class=" parent_box col-md-6 col-ms-6 col-sx-6 col-md-offset-3 col-ms-offset-3 col-sx-offset-3 text-center"  data-active="1"><div class="box active" onclick="prerv(this)"><img src="31.png" class="plus"></div><div class="box hid"><form class="new_site" id="new_site" enctype="multipart/form-data" action="" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="?"><input type="hidden" name="authenticity_token" value="hwhL0MsaPcLixtRj39CUWnVede6pNrfIWLF2mjVnoKMDQhqchr4gdXQdNUXvi8qSdi2Ke0oZ8XHSqP/5462EjQ=="><p>Название сайта</p><input type="text" name="site[name]" id="site_name" value="' + response.site_name + '"><p>Ссылка на сайт</p><input type="text" name="site[link]" id="site_link" value="' + response.site_link + '"><p>Или загрузите статический сайт в виде ZIP архива</p><input type="file" name="site[upload_site]" id="site_upload_site"><p>Загрузите свои скрины:</p><input multiple="multiple" type="file" name="file" data-url="https://api.cloudinary.com/v1_1/doy3kofpg/auto/upload" data-form-data="{&quot;timestamp&quot;:1430513029,&quot;callback&quot;:&quot;https://top-web-site.herokuapp.com/cloudinary_cors.html&quot;,&quot;signature&quot;:&quot;91db2546e6cfaf67a7db79f6aa82463dd7d7ea74&quot;,&quot;api_key&quot;:&quot;554139465466377&quot;}" data-cloudinary-field="screens[]" class="cloudinary-fileupload"><div class="preview"></div><div class="progress_bar" style="background-color: red;height: 20px;width:0;"></div><input type="submit" name="commit" value="Отправить" onclick="rab_f(th)" data-num="' +  $(th).attr('data-num') + '"></form></div></div></div>');
 						}else{
@@ -288,7 +289,7 @@ function clnx(th){
 			case 4:
 				jQuery.ajax({
 					url:     "labs/"+ $(th).attr('data-num'), 
-					type:     "POST",
+					type:     "GET",
 					dataType: "json", 
 					success: function(labs) {
 						$("#" + z + " > .active.sli>img").fadeOut();

@@ -15,7 +15,7 @@ class LabsController < ApplicationController
 			@groups = User.all.map { |u| u.group }.uniq
 
 		end
-		render json: @labs.map { |e| {number: e.id, name: e.task} }
+		render json: @labs.map { |l| {number: l.id, name: l.task} }
 	end
 
 	def show
@@ -23,11 +23,20 @@ class LabsController < ApplicationController
 		if @lab
 			@sites = @lab.sites.page(params[:page])
 			if user_signed_in?
-				@user_site = current_user.sites.where(lab_id: @lab.id)[0]
-				@user_havent_site_for_lab = @user_site.nil?
+				@user_have_site = current_user.sites.where(lab_id: @lab.id).exists?
 			end
+			render json: {
+				labs: @sites.map { |s| 
+						{name: s.name, 
+							author: s.user.name, 
+							group: s.user.group,
+							scr: view_context.cl_image_path(s.screens.sample)
+						}
+					},
+				user_have_site: @user_have_site 
+			}
 		else
-			redirect_back
+			render status: 404
 		end
 	end
 
