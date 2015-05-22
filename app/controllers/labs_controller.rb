@@ -13,7 +13,9 @@ class LabsController < ApplicationController
 		if @table_view
 			@sites = Site.all
 			@groups = User.all.map { |u| u.group }.uniq
+
 		end
+		render json: @labs.map { |e| {number: e.id, name: e.task} }
 	end
 
 	def show

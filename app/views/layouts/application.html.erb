@@ -1,77 +1,122 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>
-		<% if content_for? :title %>
-			<%= yield(:title) %>
-		<% else %>
-			Voting
-		<% end %>
-	</title>
-	<%= stylesheet_link_tag    'common', media: 'all', 'data-turbolinks-track' => true %>
-	<%= javascript_include_tag "application" %>
-	<%= javascript_include_tag 'common', 'data-turbolinks-track' => true %>
-	<%= yield(:ss) if content_for? :ss %>
-	<%= csrf_meta_tags %>
-
-</head>
-<body>
-	<div class="header">
-		<% if content_for?(:manager) or content_for?(:label) or content_for?(:title) %>
-			<div class="manager">
-				<%= yield(:manager) if content_for? :manager %>
-				<div class="url">
-					<% if content_for? :label %>
-						<%= yield(:label) %>
-					<% elsif content_for? :title %>
-						<%= yield(:title) %>
-					<% end %>
-				</div>
-			</div>
-		<% end %>
-		
-		<div class="menu">
-			<ul id = "menu">
-				<li class="selected">
-					<span ><%= link_to "Главная страница", root_path %></span>
-				</li>
-				<li class="selected">
-					<span ><%= link_to "Все лабы", labs_path %></span>
-				</li>
-				<li class="selected">
-					<span ><%= link_to "Таблица достижений", labs_path(view: "table", sorts: {:votes => -1}) %></span>
-				</li>
-				<%= yield(:menu_items) if content_for? :menu_items %>
-				<% if user_signed_in? %>
-					<li class="selected">
-						<span ><%= link_to "Профиль", users_profile_path %></span>
-					</li>
-					<% if current_user.is_admin? %>
-						<li class="selected">
-							<span ><%= link_to "Добавить лабу", new_lab_path %></span>
-						</li>
-					<% end %>
-					<li class="selected">
-						<span ><%= link_to "Выход", destroy_user_session_path %></span>
-					</li>
-				<% end %>
-			</ul> 
-		</div>
-		<% unless user_signed_in? %>
-			<%= render 'layouts/sign_in_form' %>
-		<% end %>
-	</div>
-
-	<% if notice %>
-		<p class="alert alert-success"><%= notice %></p>
-	<% end %>
-	<% if alert %>
-		<p class="alert alert-danger"><%= alert %></p>
-	<% end %>
-	<div class="content">
-		<div class="header-space"></div>
-		<%= yield %>
-	</div>
-
-</body>
+    <head>
+        <title>
+           Топ сайтов
+        </title>
+        <%= stylesheet_link_tag 'application', media: 'all'%>
+        <%= javascript_include_tag "application" %>
+        <%= javascript_include_tag 'script'%>
+        <%= yield(:ss) if content_for? :ss %>
+        <%= csrf_meta_tags %>
+    </head>
+    <body>
+        <div class="hd_main">
+            <% unless user_signed_in? %>
+            <%= render 'layouts/sign_in_form' %>
+            <% end %>
+        </div>
+        <div id="conter">
+            <div id="0" class="container an_on" style="left: 0%; top:0px;">
+                <div class="phov" onclick="clpr(this)">
+                </div>
+                <div class="active sli">
+                    <div id="galler_index" class="row" >
+                        <div class="col-md-6 col-ms-6 col-sx-6 col-md-offset-3 col-ms-offset-3 col-sx-offset-3">
+                            <div id="pool_slider" class="row" style="height: 234px;">
+                                <div id="box_1" class="box_b box_l">
+                                    <div class="buyers">
+                                        <%= image_tag "1.png", class: "comments" %>
+                                    </div>
+                                    <div class="like">
+                                        <%= image_tag "like.png", class: "comments" %>
+                                        <div class="context" >
+                                            траляля
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="box_2" class="box_b active_b" data-id-labs="">
+                                    <div class="buyers">
+                                        <%= image_tag "1.png", class: "comments" %>
+                                    </div>
+                                    <div class="like">
+                                         <%= image_tag "like.png", class: "comments" %>
+                                        <div class="context" >
+                                            траляля
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="box_3" class="box_b box_r">
+                                    <div class="buyers">
+                                        <%= image_tag "1.png", class: "comments" %>
+                                    </div>
+                                    <div class="like">
+                                        <%= image_tag "like.png", class: "comments" %>
+                                        <div class="context" >
+                                            траляля
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="controls" class="text-center">
+                                <button id="btn_1" class="attitude" onclick="btn_go(this)"></button>
+                                <button id="btn_2" class="attitude active" onclick="btn_go(this)"></button>
+                                <button id="btn_3" class="attitude" onclick="btn_go(this)"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" onclick="clnx(this)" data-this="1">
+                        <div class="parent_box col-md-6 col-ms-6 col-sx-6 col-md-offset-3 col-ms-offset-3 col-sx-offset-3 text-center">
+                            <div class="box active">
+                                все лабы
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" parent_box col-md-6 col-ms-6 col-sx-6 col-md-offset-3 col-ms-offset-3 col-sx-offset-3 text-center"  data-active="1" style="height: 403px;">
+                            <div class="box active" onclick="prerv(this)">
+                                таблица
+                            </div>
+                            <div class="box hid" >
+                                <div class="psacvр1" onclick="">
+                                    <label>Выбрать лабу:</label>
+                                    <select id="search-lab" name="lab" data-dynatable-query="lab">
+                                        <option></option>
+                                        <option>Сделать сайт о себе на HTML (1-я лабораторная работа)</option>
+                                        <option>Написать статью на Википедию, используя вики-разметку (2-я лабораторная работа)</option>
+                                        <option>Отредактировать свой сайт, используя CSS и PHP (4-я лабораторная работа)</option>
+                                    </select>
+                                    <label>Выбрать группу:</label>
+                                    <select id="search-group" name="group" data-dynatable-query="group">
+                                        <option></option>
+                                        <option></option>
+                                        <option>ПИ-42</option>
+                                        <option>ИВТ-31</option>
+                                        <option>ИВТ-32</option>
+                                        <option>ПИ-41</option>
+                                    </select>
+                                    <div id="dynatable-processing-site-table" class="dynatable-processing" style="position: absolute; top: 157px; left: 216px; width: 1395px; height: 30px; display: none;"><span style="position: relative; top: 4.5px; left: 650px;">Processing...</span></div>
+                                    <table id="site-table" border="1" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <td data-dynatable-column="lab" class="dynatable-head"><a
+                                                    22:25:53	
+                                                    class="dynatable-sort-header" href="#">Задание лабораторной</a></td>
+                                                <td data-dynatable-column="name" class="dynatable-head"><a class="dynatable-sort-header" href="#">Имя студента</a></td>
+                                                <td data-dynatable-column="group" class="dynatable-head"><a class="dynatable-sort-header" href="#">Группа студента</a></td>
+                                                <td data-dynatable-column="votes" class="dynatable-head"><a class="dynatable-sort-header" href="#">Голосов за работу<span class="dynatable-arrow"> ▼</span></a></td>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pd_main text-center">
+            &copy; Alexey Kolpakov &amp; Ilya Babushkin
+        </div>
+    </body>
 </html>
