@@ -27,7 +27,8 @@ class LabsController < ApplicationController
 			end
 			render json: {
 				labs: @sites.map { |s| 
-						{name: s.name, 
+						{number: s.id,
+							name: s.name, 
 							author: s.user.name, 
 							group: s.user.group,
 							scr: view_context.cl_image_path(s.screens.sample)
