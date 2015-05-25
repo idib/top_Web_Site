@@ -19,14 +19,18 @@ class LabsController < ApplicationController
 	end
 
 	def show
-		@lab = Lab.find_by_id(params[:id])
-		if @lab
-			@sites = @lab.sites.page(params[:page])
+		lab = Lab.find_by_id(params[:id])
+		if lab
+			sites = lab.sites
 			if user_signed_in?
-				@user_have_site = current_user.sites.where(lab_id: @lab.id).exists?
+				site = current_user.sites.where(lab_id: lab.id)
+				user_have_site = site.exists?
+				if user_have_site
+					sites = (site[0] + sites).uniq
+				end
 			end
 			render json: {
-				labs: @sites.map { |s| 
+				labs: sites.map { |s| 
 						{number: s.id,
 							name: s.name, 
 							author: s.user.name, 
@@ -34,7 +38,7 @@ class LabsController < ApplicationController
 							scr: view_context.cl_image_path(s.screens.sample)
 						}
 					},
-				user_have_site: @user_have_site 
+				user_have_site: user_have_site 
 			}
 		else
 			render status: 404
