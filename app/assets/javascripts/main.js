@@ -200,6 +200,7 @@ rivets.formatters.isAdmin = function(userStatus) {
 
 var routes = {
 	'/': function () {
+		closeSiteForm();
 		ajaxSlideTo($.get("/labs"), "#lab-list", 
 			function (data) {
 				labs.data = data;
