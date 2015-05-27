@@ -29,8 +29,6 @@ gem 'devise', '~> 3.4.0'
 gem 'cloudinary'
 # for heroku
 gem 'rails_12factor'
-# for pagination
-gem 'will_paginate', '~> 3.0.6'
 # good bye vendor prefixes
 gem "autoprefixer-rails"
 # upload static sites

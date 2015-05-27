@@ -11,4 +11,8 @@ class ApplicationController < ActionController::Base
   def redirect_back
     redirect_to request.referer || :root
   end
+
+  def redirect_lab id
+    redirect_to request.referer + "##{id}"
+  end
 end

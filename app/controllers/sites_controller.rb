@@ -14,21 +14,7 @@ class SitesController < ApplicationController
 			site.save
 			render json: {like: like}
 		else
-			render json: {err: true}
-		end
-	end
-
-	def new
-		lab_id = params[:lab_id]
-		if Lab.exists?(lab_id)
-			if current_user.sites.where(lab_id: lab_id).exists?
-				flash[:alert] = 'У Вас уже есть сайт для этой лабы'
-				redirect_back
-			else
-				@site = Site.new
-			end
-		else
-			redirect_back
+			head 400
 		end
 	end
 
@@ -40,14 +26,12 @@ class SitesController < ApplicationController
 					site.upload_static params[:site][:upload_site].path
 					site.save
 				end
-				redirect_to site.lab
+				redirect_lab site.lab.id
 			else
-				@site = Site.new(post_params)
-				render 'new'
+				head 400
 			end
 		else
-			flash[:alert] = 'У Вас уже есть сайт для этой лабы'
-			redirect_back
+			redirect_lab params[:lab_id]
 		end
 	end
 
@@ -56,11 +40,7 @@ class SitesController < ApplicationController
 		site.delete_static
 		lab = site.lab
 		site.destroy
-		redirect_to lab
-	end
-
-	def edit
-		@site = Site.find params[:id]
+		render nothing: true
 	end
 
 	def delete_screen
@@ -92,25 +72,8 @@ class SitesController < ApplicationController
 				@site.upload_static params[:site][:upload_site].path
 			end
 			@site.save
-			flash[:notice] = "Изменения успешно сохранены"
-			redirect_back
-		else
-			render 'edit'
+			redirect_lab @site.lab.id
 		end
-	end
-
-	def index
-		if Lab.exists? params[:lab_id]
-			lab = Lab.find params[:lab_id]
-			redirect_to lab_path(lab)
-		else
-			redirect_back
-		end
-	end
-
-	def show
-		#@site = Site.find params[:id]
-		redirect_back
 	end
 
 	private
@@ -157,7 +120,7 @@ class SitesController < ApplicationController
 	def check_owner
 		site = Site.find_by_id params[:id]
 		if current_user.id != site.user.id
-			redirect_to :root
+			head 400
 		end
 	end
 

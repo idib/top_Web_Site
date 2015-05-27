@@ -1,58 +1,71 @@
 class LabsController < ApplicationController
-	before_action :authenticate_user!, except: [:index, :show, :main]
-	before_action :check_admin, except: [:index, :show, :main]
+	before_action :authenticate_user!, except: [:index, :show, :main, :table]
+	before_action :check_admin, except: [:index, :show, :main, :table]
 	def main
-		@random =  Site.order('created_at DESC').limit(10).shuffle[0..2].map { |site|
-			OpenStruct.new({:name => site.name, :screen => site.screens.sample, :site => site})
-		}
+		@lab = Lab.new
 	end
 
 	def index
 		@labs = Lab.all.order('created_at')
-		@table_view = params[:view] == "table"
-		if @table_view
-			@sites = Site.all
-			@groups = User.all.map { |u| u.group }.uniq
-		end
+		render json: @labs.map { |l| {id: l.id, task: l.task} }
 	end
 
 	def show
-		@lab = Lab.find_by_id(params[:id])
-		if @lab
-			@sites = @lab.sites.page(params[:page])
+		lab = Lab.find_by_id(params[:id])
+		if lab
+			sites = lab.sites
 			if user_signed_in?
-				@user_site = current_user.sites.where(lab_id: @lab.id)[0]
-				@user_havent_site_for_lab = @user_site.nil?
+				site = current_user.sites.where(lab_id: lab.id)
+				user_hasnt_site = !site.exists?
+				unless user_hasnt_site
+					sites = (site + sites).uniq
+				end
 			end
+			
+			render json: {
+				sites: sites.map { |s| 
+						screen_urls = s.screens.map {|scr| 
+							{good: view_context.cl_image_path(scr, quality: 75),
+								bad: view_context.cl_image_path(scr, crop: :fill, width: 250, height: 200),
+								id: scr}
+							}
+						{id: s.id,
+							name: s.name, 
+							link: s.link,
+							hosted: s.static_link,
+							author: s.user.name, 
+							users_site: (user_signed_in? and s.user.id == current_user.id),
+							group: s.user.group,
+							first_screen: screen_urls[0],
+							screens: (screen_urls[1..-1] or []),
+							likes: s.likes,
+							user_like: (user_signed_in? and current_user.likes[s.id])
+						}
+					},
+				user_hasnt_site: user_hasnt_site 
+			}
 		else
-			redirect_back
+			head 404
 		end
 	end
 
-	def new
-		@lab = Lab.new
+	def table
+		@labs = Lab.all.order('created_at')
+		@sites = Site.all
+		@groups = User.all.map { |u| u.group }.uniq
+		render 'labs/table', layout: false
 	end
 
 	def create
 		@lab = Lab.new(lab_params)
-		if @lab.save
-			redirect_to @lab
-		else
-			render 'new'
-		end
-	end
-
-	def edit
-		@lab = Lab.find params[:id]
+		@lab.save
+		redirect_back
 	end
 
 	def update
 		@lab = Lab.find params[:id]
-		if @lab.update(lab_params)
-			redirect_to @lab
-		else
-			render 'edit'
-		end
+		@lab.update(lab_params)
+		redirect_back
 	end
 
 	private

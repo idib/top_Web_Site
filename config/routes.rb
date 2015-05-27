@@ -5,8 +5,9 @@ Rails.application.routes.draw do
     post "/users/sign_in" => "devise/sessions#create", :as => :user_session
     get "/users/sign_out" => "devise/sessions#destroy", :as => :destroy_user_session
   end
+  get '/labs/table' => 'labs#table'
   post '/sites/like/:id' => 'sites#like'
-  get '/users/profile' => 'users#profile'
+  get '/users/whoami' => 'users#whoami'
   delete '/sites/:id/delete_screen' => 'sites#delete_screen'
   delete '/sites/:id/delete_static' => 'sites#delete_static'
 

@@ -1,77 +1,120 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>
-		<% if content_for? :title %>
-			<%= yield(:title) %>
-		<% else %>
-			Voting
-		<% end %>
-	</title>
-	<%= stylesheet_link_tag    'common', media: 'all', 'data-turbolinks-track' => true %>
-	<%= javascript_include_tag "application" %>
-	<%= javascript_include_tag 'common', 'data-turbolinks-track' => true %>
-	<%= yield(:ss) if content_for? :ss %>
-	<%= csrf_meta_tags %>
-
-</head>
-<body>
-	<div class="header">
-		<% if content_for?(:manager) or content_for?(:label) or content_for?(:title) %>
-			<div class="manager">
-				<%= yield(:manager) if content_for? :manager %>
-				<div class="url">
-					<% if content_for? :label %>
-						<%= yield(:label) %>
-					<% elsif content_for? :title %>
-						<%= yield(:title) %>
-					<% end %>
-				</div>
-			</div>
-		<% end %>
-		
-		<div class="menu">
-			<ul id = "menu">
-				<li class="selected">
-					<span ><%= link_to "Главная страница", root_path %></span>
-				</li>
-				<li class="selected">
-					<span ><%= link_to "Все лабы", labs_path %></span>
-				</li>
-				<li class="selected">
-					<span ><%= link_to "Таблица достижений", labs_path(view: "table", sorts: {:votes => -1}) %></span>
-				</li>
-				<%= yield(:menu_items) if content_for? :menu_items %>
-				<% if user_signed_in? %>
-					<li class="selected">
-						<span ><%= link_to "Профиль", users_profile_path %></span>
-					</li>
-					<% if current_user.is_admin? %>
-						<li class="selected">
-							<span ><%= link_to "Добавить лабу", new_lab_path %></span>
-						</li>
-					<% end %>
-					<li class="selected">
-						<span ><%= link_to "Выход", destroy_user_session_path %></span>
-					</li>
-				<% end %>
-			</ul> 
-		</div>
-		<% unless user_signed_in? %>
-			<%= render 'layouts/sign_in_form' %>
-		<% end %>
-	</div>
-
-	<% if notice %>
-		<p class="alert alert-success"><%= notice %></p>
-	<% end %>
-	<% if alert %>
-		<p class="alert alert-danger"><%= alert %></p>
-	<% end %>
-	<div class="content">
-		<div class="header-space"></div>
-		<%= yield %>
-	</div>
-
-</body>
+    <head>
+        <title>
+           Топ сайтов
+        </title>
+        <%= stylesheet_link_tag 'application', media: 'all'%>
+        <%= stylesheet_link_tag 'jquery.dynatable' %>
+        <%= javascript_include_tag "application" %>
+        <%= javascript_include_tag "director" %>
+        <%= javascript_include_tag "rivets" %>
+        <%= javascript_include_tag "sweetalert" %>
+        <%= javascript_include_tag "lightbox" %>
+        <%= javascript_include_tag 'jquery.dynatable' %>
+        <%= javascript_include_tag 'main'%>
+        <%= csrf_meta_tags %>
+    </head>
+    <body>
+    	<%= cloudinary_js_config %>
+        <div class="header">
+            <% unless user_signed_in? %>
+            	<%= render 'layouts/sign_in_form' %>
+            <% end %>
+        </div>
+        <div class="space30"></div>
+        <div class="text-center">
+        	<div id="cssmenu">
+        		<ul>
+        			<li><a href="/#/"><span>Главная страница</span></a></li>
+        			<li><a href="/#/table"><span>Таблица результатов</span></a></li>
+        			<% if user_signed_in? %>
+        				<li><a href="<%= destroy_user_session_path -%>"><span>Выход</span></a></li>
+        			<% end %>
+        		</ul>
+        	</div>
+        	<div class="space80"></div>
+        	<div id="pages">
+        		<div id="lab-list" class="btn-group-vertical green-list  active-list">
+        			<li rv-show="user.status | isAdmin">
+        				<div id="add-lab-form" class="element">
+        					<img id="add-lab-btn" class="add-btn" src="add_button.png" onclick="openAddLabForm()">
+        					<div id="lab-form" class="myform">
+        						<img id="close-lab-btn" class="close-btn" src="close-btn.png" onclick="closeLabForm()">
+        						<%= form_for @lab do |f| %>
+	        						<p>Задание:</p>
+	        						<%= f.text_field(:task) %>
+	        						<input type="hidden" name="_method" value="post">
+	        						<%= f.submit "Отправить" %>
+        						<% end %>
+        					</div>
+        				</div>
+        			</li>
+        			<li rv-each-lab="labs.data">
+        				<img rv-show="user.status | isAdmin" class="edit-lab-btn" src="edit_btn.png" rv-onclick="lab | editLabHandler"/>
+        				<a rv-href="lab.id | labLink">{ lab.task }</a>
+        			</li>
+        		</div>
+        		<div id="site-list" class="btn-group-vertical green-list">
+        			<li rv-show="user.showForm">
+        				<div id="add-site-form" class="element">
+        					<img id="add-site-btn" class="add-btn" src="add_button.png" rv-onclick="sites.labId | addSiteHandler">
+        					<div id="site-form" class="myform">
+        						<img id="close-site-btn" class="close-btn" src="close-btn.png" onclick="closeSiteForm()">
+        						<%= form_for :site, html: {multipart: true} do |f| %>
+	        						<p>Название сайта</p>
+	        						<%= f.text_field(:name) %>
+	        						<p>Ссылка на сайт</p>
+	        						<%= f.text_field(:link) %>
+	        						<p>Загрузить статический сайт в виде ZIP архива</p>
+	        						<h6  rv-hide="user.hasntSite" id="static-delete"><a href="javascript:void(0)">Удалить хостящийся сайт</a></h6>
+	        						<%= f.file_field("upload_site") %>
+	        						<p>Загрузить скриншоты:</p>
+	        						<%= cl_image_upload_tag("screens[]", :html => { :multiple => true }) %>
+	        						<div class="preview">
+	        						</div>
+	        						<input type="hidden" name="_method" value="post">
+	        						<div class="progress_bar" style="background-color: red;height: 20px;width:0;clear:both"></div>
+	        						<%= submit_tag "Отправить" %>
+	        						<h6 style="text-align:right">
+	        							<a rv-hide="user.hasntSite" id="full-delete" href="javascript:void(0)">Удалить сайт полностью</a>
+	        						</h6>
+        						<% end %>
+        					</div>
+        				</div>
+        			</li>
+        			<li rv-each-site="sites.data">
+        				<div class="block">
+        				<img rv-show="site.users_site" class="edit-site-btn" src="edit_btn.png" rv-onclick="index | editSiteHandler sites.labId "/>
+        					<a rv-href="site | siteUrl" target="_blank"><div class="name">{site.name}</div></a>
+        					<a rv-href="site.first_screen.good" rv-data-lightbox="site.id">
+        						<img class="main-screen" rv-src="site.first_screen.good"/>
+        					</a>
+        					<div class="space10"></div>
+        					<div class="clearfix">
+      
+        						<div rv-each-screen="site.screens" class="small-screen">
+        							<a rv-href="screen.good" rv-data-lightbox="site.id" rv-ololo="screen.good">
+        								<img rv-src="screen.bad"/>
+        							</a>
+        						</div>
+        					</div>
+        					<div class="author">{site.author}</div>
+        					<div rv-show="user.status | isAuthorized" class="like-container">
+        						<span class="like-value">{site.likes}</span>&nbsp;
+        						<div rv-class="site.user_like | likeCssClass" rv-onclick="site.id | likeClickHandler"></div>
+        					</div>
+        				</div>
+        			</li>
+        		</div>
+        		<img id="load-screen" src="load.gif"/>
+        		<div id="table-view">
+        			<div  class="result-table center-block"></div>
+        		</div>
+        	</div>
+        </div>
+        <div class="footer text-center">
+        	Copyright &copy; 2015 &middot; Kolpakov Alexey &amp; Babushkin Ilya &middot; All rights reserved.
+        </div>
+    </body>
 </html>
