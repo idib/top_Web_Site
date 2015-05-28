@@ -99,9 +99,9 @@
         						</div>
         					</div>
         					<div class="author">{site.author}</div>
-        					<div rv-show="user.status | isAuthorized" class="like-container">
+        					<div class="like-container">
         						<span class="like-value">{site.likes}</span>&nbsp;
-        						<div rv-class="site.user_like | likeCssClass" rv-onclick="site.id | likeClickHandler"></div>
+        						<div rv-show="user.status | isAuthorized" rv-class="site.user_like | likeCssClass" rv-onclick="site.id | likeClickHandler"></div>
         					</div>
         				</div>
         			</li>
