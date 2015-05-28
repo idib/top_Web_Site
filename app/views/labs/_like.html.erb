@@ -1,4 +1,0 @@
-<% if user_signed_in? %>
-	<div class="like <%= 'pressed' if current_user.likes[site.id] == 1%>" onclick="like(this,<%= site.id %>)">
-	</div>
-<% end %>
