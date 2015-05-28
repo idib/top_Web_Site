@@ -216,6 +216,11 @@ var routes = {
 						recordCount: false,
 						search: false
 					},
+					readers: {
+						'votes': function(el, record) {
+							return Number(el.innerHTML);
+						}
+					},
 					inputs: { 
 						queries: $('#search-lab, #search-group')
 					}
