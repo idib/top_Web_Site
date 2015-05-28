@@ -225,6 +225,7 @@ var routes = {
 						queries: $('#search-lab, #search-group')
 					}
 				}).data('dynatable');
+				$("[data-dynatable-column='votes']").children().click().click();
 			});
 	},
 	'/:lab_id': function (labId) {
